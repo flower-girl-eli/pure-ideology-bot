@@ -1,3 +1,4 @@
+import random
 import tweepy
 from twitter_codes import *
 
@@ -17,62 +18,40 @@ zizeks_arr = [
     "https://tenor.com/bh6Ku.gif"
 ]
 
+auth = tweepy.OAuthHandler(my_api_key, my_api_secret)
+auth.set_access_token(my_access_token, my_access_token_sec)
+
+api = tweepy.API(auth)
+
+
+
 def search_for_tweets():
     pass
 
 def auth_to_tw(): 
 
-    auth = tweepy.OAuthHandler(my_api_key, my_api_secret)
-    auth.set_access_token(my_access_token, my_access_token_sec)
-
-    api = tweepy.API(auth)
-
     retry_counter = 0
 
-
     while True: 
         if retry_counter < 4: #If it fails, just try it multiple times in order to be sure lol. 
             try: 
                 api.verify_credentials()
                 print("auth ok")
-                allGood = True #this code is shit lol
+                break
             except:
                 print("Auth error")
-                allGood = False
-
-            if allGood == True:
-                return(True)
-                print("Auth successful")
-                break
-            elif allGood == False: 
-                retry_counter = retry_counter + 1 
-                continue
-        else: 
-            print("Yeah, the code is f-ed. Sorry, but you need to rewrite it.")
+                retry_counter = ++retry_counter
+        elif retry_counter > 4:
+            print("Auth failed. There is problem with your code.")
             break
-            
 
-    while True: 
-        if retry_counter < 4: #If it fails, just try it multiple times in order to be sure lol. 
-            try: 
-                api.verify_credentials()
-                print("auth ok")
-                allGood = True #this code is shit lol
-            except:
-                print("Auth error")
-                allGood = False
-
-            if allGood == True:
-                
-                while True: 
-                    pass
+def test_tweeting():
+    my_tweet = random.choice(zizeks_arr)
+    api.update_status(my_tweet)
 
 
-                break
-            elif allGood == False: 
-                retry_counter = retry_counter + 1 
-                continue
-        else: 
-            print("Yeah, the code is f-ed. Sorry, but you need to rewrite it.")
-            break
-        
+def run_it():
+    auth_to_tw()
+    test_tweeting()
+
+run_it() 
